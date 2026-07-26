@@ -1,0 +1,214 @@
+/* --- Core Variables --- */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #37352f;
+    --muted-color: #727272;
+    --box-bg: #f7f6f3;
+    
+    /* Button Colors (Muted Pastels) */
+    --btn-red-bg: #ffe4e4;
+    --btn-red-text: #c04040;
+    --btn-blue-bg: #eaf1fb;
+    --btn-blue-text: #0074d9;
+    --btn-green-bg: #edf6ec;
+    --btn-green-text: #32a13e;
+    --btn-yellow-bg: #fdfae5;
+    --btn-yellow-text: #b18b00;
+
+    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    --transition: all 0.3s ease;
+}
+
+/* --- Base Styles --- */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-stack);
+    line-height: 1.6;
+}
+
+h1, h2 {
+    margin-top: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+}
+
+/* --- Reusable Box Shadow --- */
+.box-shadowed {
+    background: var(--box-bg);
+    border: 1px solid rgba(15, 15, 15, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* --- Main Header & Photo --- */
+.main-header {
+    height: 100px; /* Base height for the banner area */
+    border-bottom: 1px solid rgba(15, 15, 15, 0.1);
+    margin-bottom: 20px;
+    overflow: visible; /* Allows the photo to pop out */
+    position: relative;
+}
+
+.header-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 100%;
+    position: relative;
+    display: flex;
+}
+
+.profile-photo-container {
+    width: 130px;
+    height: 130px;
+    position: absolute;
+    bottom: -20px; /* Positioning the picture, breaking the header border */
+    left: 20px;
+    background: var(--bg-color);
+    border-radius: 8px; /* Rounded corners for the container */
+    overflow: hidden; /* Crops image inside rounded corners */
+    z-index: 10;
+    padding: 3px; /* Simple inner border effect */
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures the photo isn't stretched */
+}
+
+.banner-graphic-container {
+    flex-grow: 1;
+    margin-left: 170px; /* Push it right of the photo */
+    /* This section replaces the gear pattern. 
+       You can add a background-image URL here in the future. */
+    opacity: 0.1; /* Optional fading effect for future patterns */
+}
+
+/* --- Main Title --- */
+.main-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-bottom: 15px;
+    margin-top: 20px;
+}
+
+/* --- Quick Links Buttons --- */
+.quick-links {
+    display: flex;
+    flex-wrap: wrap; /* Wrap buttons on small screens */
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.link-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.link-btn i {
+    font-style: normal;
+    margin-right: 10px;
+}
+
+.link-btn:hover {
+    transform: translateY(-2px); /* Simple interactive animation */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+}
+
+/* Dynamic Colors per Button */
+.btn-resume { background-color: var(--btn-red-bg); color: var(--btn-red-text); }
+.btn-linkedin { background-color: var(--btn-blue-bg); color: var(--btn-blue-text); }
+.btn-github { background-color: var(--btn-green-bg); color: var(--btn-green-text); }
+.btn-design { background-color: var(--btn-yellow-bg); color: var(--btn-yellow-text); }
+
+/* --- Split Layout --- */
+.content-split {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr; /* 2 parts bio, 1 part sidebar */
+    gap: 20px;
+}
+
+/* --- Bio Section --- */
+.bio-section {
+    padding: 25px;
+}
+
+.bio-section p {
+    margin-top: 0;
+    margin-bottom: 1.2rem;
+}
+
+.bio-section p:last-child {
+    margin-bottom: 0;
+}
+
+.bio-greeting {
+    font-weight: 600;
+}
+
+.bio-section a {
+    color: var(--btn-blue-text);
+    text-decoration: underline;
+}
+
+/* --- Sidebar Section --- */
+.sidebar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-box, .status-box {
+    padding: 15px 20px;
+}
+
+.contact-header {
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.contact-box ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: var(--muted-color);
+}
+
+.contact-box ul li a {
+    color: var(--btn-blue-text);
+    text-decoration: underline;
+}
+
+/* --- Animations Placeholder --- */
+/* Add this class in JS to animate elements on load */
+.fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
