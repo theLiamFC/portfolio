@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Title | Liam Campbell</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* Scoped layout styles for project deep-dive pages */
+    .project-detail-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem 2rem;
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s ease;
+    }
+    
+    .back-link:hover {
+      color: #0f172a;
+    }
+
+    .detail-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 1rem;
+    }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .detail-hero-image {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .detail-hero-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .detail-body h2 {
+      font-size: 1.5rem;
+      color: #0f172a;
+      margin: 2rem 0 0.75rem 0;
+    }
+
+    .detail-body p {
+      color: #334155;
+      margin-bottom: 1.25rem;
+      font-size: 1.05rem;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="project-detail-container">
+    <!-- Back to Gallery Navigation -->
+    <a href="../index.html#projects-gallery" class="back-link">
+      &larr; Back to all projects
+    </a>
+
+    <!-- Project Header -->
+    <header class="detail-header">
+      <h1>Autonomous Satellite Mechanism</h1>
+      <div class="detail-tags">
+        <span class="tag">Mechanical Design</span>
+        <span class="tag">Mechatronics</span>
+        <span class="tag">Optimization</span>
+        <span class="tag">Autonomous Systems</span>
+      </div>
+    </header>
+
+    <!-- Featured Project Image / Banner -->
+    <div class="detail-hero-image">
+      <img src="../assets/images/project-one.jpg" alt="Autonomous Satellite Mechanism Showcase">
+    </div>
+
+    <!-- Project Description Content -->
+    <article class="detail-body">
+      <h2>Project Overview</h2>
+      <p>
+        Provide a comprehensive overview of the project goals, the problem being solved, 
+        and your specific role in designing, building, or analyzing the system.
+      </p>
+
+      <h2>Technical Approach & Methodology</h2>
+      <p>
+        Detail the engineering processes used—such as numerical optimization, CAD modeling, 
+        simulation, FEA/CFD, or embedded control system development. You can add extra 
+        images, charts, or embedded videos in this section to showcase your results.
+      </p>
+
+      <h2>Key Takeaways & Results</h2>
+      <p>
+        Summarize performance metrics, testing outcomes, or key lessons learned during 
+        development and prototyping.
+      </p>
+    </article>
+  </main>
+
+</body>
+</html>
