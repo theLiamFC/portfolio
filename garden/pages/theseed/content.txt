@@ -1,0 +1,20 @@
+/*
+    title: The Seed
+    description: The first page in my digital garden.
+    
+    date:{
+        created: 2026-07-30
+    }
+
+    tags:{
+        Field Notes
+    }
+*/
+
+# The Seed
+
+This should be my first page in my digital garden if I get everything working. My goal is to remove the barrier to creating
+my own content as much as possible so that I am encouraged to produce more of it!
+
+The system I have set up so far uses a custom .txt file to create a page that is then parsed into .html using a python script. I will continue
+to add layers to my .txt file format to integrate images and custom styling but for now - just text!

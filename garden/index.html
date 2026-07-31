@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Liam's Garden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-white selection:bg-red-200">
+    <main class="mx-auto w-full max-w-screen-sm px-8 md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl">
+        
+        <nav class="sticky top-0 z-10 flex items-center justify-between py-4 bg-white/80 backdrop-blur-md">
+            <div class="flex rounded-lg border border-neutral-200 bg-white p-1 shadow-sm">
+                <a class="rounded py-1 px-3 text-sm tracking-tight text-neutral-900 font-medium hover:bg-neutral-100 transition-colors" href="https://liamfcampbell.com">Liam Campbell</a>
+                <a class="rounded py-1 px-3 text-sm tracking-tight text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors" href="/garden">Garden</a>
+            </div>
+            <div class="hidden md:flex gap-4">
+                <a href="https://github.com/" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">GitHub</a>
+                <a href="#" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">Resume</a>
+            </div>
+        </nav>
+
+        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            
+            <!-- Hero / Intro Section -->
+            <div class="row-span-2 sm:col-span-2 lg:aspect-square p-2">
+                <div class="h-full w-full p-6 sm:p-8 rounded-xl bg-neutral-50">
+                    <h1 class="font-serif-custom text-3xl font-light leading-snug text-neutral-500 sm:text-4xl lg:text-5xl">
+                        Hey there, I’m <span class="text-neutral-900 font-medium">Liam</span> 👋 <br><br>
+                        Welcome to my digital garden 🌱. <br><br>
+                        I'm a robotics engineer currently building at <a href="#" class="text-red-500 hover:text-red-600 transition-colors">EraDrive</a>. <br><br>
+                        In my free time, I enjoy dialing in my <a href="#" class="text-red-500 hover:text-red-600 transition-colors">espresso</a> setup, shooting <a href="#" class="text-red-500 hover:text-red-600 transition-colors">B&W film</a>, and spending time <a href="#" class="text-red-500 hover:text-red-600 transition-colors">outdoors</a> surfing and skiing.
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Dynamically Populated Cards -->
+            
+            <div class="aspect-square p-2">
+                <a href="pages/theseed/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-neutral-50 transition-colors hover:bg-neutral-100 border border-transparent hover:border-neutral-200">
+                    <div class="flex h-full flex-col justify-between p-6">
+                        <div class="flex items-center justify-between text-sm tracking-tight text-neutral-400">
+                            <span>Field Notes</span>
+                        </div>
+                        <div>
+                            <h3 class="font-serif-custom text-3xl font-light text-neutral-900">The Seed</h3>
+                            <p class="mt-2 text-sm text-neutral-500 line-clamp-3">The first page in my digital garden.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+
+        <footer class="mt-24 mb-12 flex justify-center">
+            <span class="text-sm tracking-tight text-neutral-400">Tended by Liam Campbell</span>
+        </footer>
+
+    </main>
+</body>
+</html>
