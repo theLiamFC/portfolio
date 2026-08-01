@@ -27,26 +27,54 @@ def process_folder(folder_path):
     frontmatter = meta_match.group(1)
     body = content[meta_match.end():].strip()
 
-    # 2. Extract Title, Tags, and Image directly from Frontmatter
+    # 2. Extract standard fields
     title_match = re.search(r'^title:\s*(.+)$', frontmatter, re.MULTILINE)
     title = title_match.group(1).strip() if title_match else "Untitled Page"
 
     tags_match = re.search(r'^tags:\s*(.+)$', frontmatter, re.MULTILINE)
     tags_html = ""
     if tags_match:
-        # Split by comma and clean up spaces
         tags = [t.strip() for t in tags_match.group(1).split(',')]
         tag_spans = [f'<span class="bg-neutral-100 text-neutral-600 border border-neutral-200 px-2.5 py-1 rounded-md text-xs tracking-tight font-mono inline-block">{tag}</span>' for tag in tags]
         tags_html = f'<div class="flex flex-wrap gap-2 mb-4">{"".join(tag_spans)}</div>'
 
+    # STRICT IMAGE CHECK: Verify the file actually exists before generating the <img> tag
     image_match = re.search(r'^image:\s*(.+)$', frontmatter, re.MULTILINE)
     image_html = ""
     if image_match:
-        image_filename = image_match.group(1).strip()
-        # Injects the hero image directly below the title header
-        image_html = f'<img src="{image_filename}" alt="{title}" class="w-full h-64 md:h-96 object-cover rounded-xl mb-10 shadow-sm">'
+        image_filename = image_match.group(1).strip(' "\'')
+        if image_filename and image_filename.lower() not in ["", "none", "null"]:
+            image_path = os.path.join(folder_path, image_filename)
+            if os.path.exists(image_path):
+                image_html = f'<img src="{image_filename}" alt="{title}" class="w-full h-64 md:h-96 object-cover rounded-xl mb-10 shadow-sm">'
 
-    # 3. Handle Date Logic (Appends 'revised' if older than 7 days)
+    # 3. Handle 'Type' branching logic
+    type_match = re.search(r'^type:\s*(.+)$', frontmatter, re.MULTILINE)
+    page_type = type_match.group(1).strip() if type_match else "blog"
+
+    type_specific_html = ""
+    if page_type == "institution":
+        # Extract institution-specific metadata
+        location_match = re.search(r'^location:\s*(.+)$', frontmatter, re.MULTILINE)
+        location = location_match.group(1).strip() if location_match else "Not specified"
+        
+        rating_match = re.search(r'^rating:\s*(.+)$', frontmatter, re.MULTILINE)
+        rating = rating_match.group(1).strip() if rating_match else "Unrated"
+
+        type_specific_html = f"""
+        <div class="bg-neutral-100 border border-neutral-200 rounded-lg p-5 mb-8 flex flex-col sm:flex-row gap-4 sm:gap-8 text-sm">
+            <div>
+                <span class="text-neutral-500 uppercase tracking-wider text-xs block mb-1">Location</span>
+                <span class="font-medium text-neutral-900">{location}</span>
+            </div>
+            <div>
+                <span class="text-neutral-500 uppercase tracking-wider text-xs block mb-1">Rating</span>
+                <span class="font-medium text-neutral-900">{rating}</span>
+            </div>
+        </div>
+        """
+
+    # 4. Handle Date Logic
     today_str = datetime.now().strftime('%Y-%m-%d')
     today_date = datetime.strptime(today_str, '%Y-%m-%d')
     
@@ -56,7 +84,6 @@ def process_folder(folder_path):
 
     revised_matches = re.findall(r'^revised:\s*(\d{4}-\d{2}-\d{2})', frontmatter, re.MULTILINE)
     
-    # If the file hasn't been edited in 7 days, add a new revision date to the frontmatter string
     if not revised_matches and (today_date - created_date) > timedelta(days=7):
         frontmatter += f"\nrevised: {today_str}"
         revised_matches.append(today_str)
@@ -66,7 +93,6 @@ def process_folder(folder_path):
             frontmatter += f"\nrevised: {today_str}"
             revised_matches.append(today_str)
 
-    # Generate HTML for Dates with Sliding Accordion Animation
     if revised_matches:
         most_recent = revised_matches[-1]
         older_revisions = list(reversed(revised_matches[:-1]))
@@ -91,23 +117,25 @@ def process_folder(folder_path):
     else:
         date_html = f"<span>Planted: {created_str}</span>"
 
-    # 4. Overwrite the original .md file to lock in any new revision dates
+    # 5. Overwrite the original .md file to lock in any new revision dates
     new_md_content = f"---\n{frontmatter}\n---\n\n{body}\n"
     with open(md_filepath, 'w', encoding='utf-8') as f:
         f.write(new_md_content)
 
-    # 5. Convert Markdown to HTML using the official library
+    # 6. Pre-process Custom Garden Links `[display]((folder-name))`
+    body = re.sub(r'\[(.*?)\]\(\((.*?)\)\)', r'[\1](../\2/index.html)', body)
+
+    # 7. Convert Markdown to HTML
     final_html_body = markdown.markdown(body)
 
-    # 6. Inject into the final HTML template
+    # 8. Inject into the final HTML template
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
-    <!-- Animated Red Circle Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23ef4444'><animate attributeName='fill' values='%23ef4444;%233b82f6;%2310b981;%23ef4444' dur='6s' repeatCount='indefinite'/></circle></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23ef4444'><animate attributeName='fill' values='%23ef4444;%233b82f6;%2310b981;%23ef4444' dur='15s' repeatCount='indefinite'/></circle></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <link rel="stylesheet" href="../../style.css">
@@ -119,7 +147,7 @@ def process_folder(folder_path):
         </nav>
         
         <header class="mb-10">
-            <h1 class="font-serif-custom text-4xl md:text-5xl font-light text-neutral-900 mb-6">{title}</h1>
+            <h1 class="text-4xl md:text-5xl font-light text-neutral-900 mb-6">{title}</h1>
             {tags_html}
             <div class="font-mono text-xs text-neutral-400 mt-4 tracking-tight">
                 {date_html}
@@ -130,7 +158,9 @@ def process_folder(folder_path):
         
         <hr class="border-neutral-200 mb-10">
         
-        <article class="prose prose-neutral prose-headings:font-serif-custom prose-h1:text-4xl prose-h1:font-light lg:prose-lg">
+        {type_specific_html}
+
+        <article class="prose prose-neutral prose-h1:text-4xl prose-h1:font-light lg:prose-lg prose-a:text-red-500 prose-a:hover:text-red-600 prose-a:transition-colors prose-a:no-underline">
             {final_html_body}
         </article>
         
@@ -164,7 +194,6 @@ def process_all_pages(base_dir='pages'):
             
         needs_update = False
         
-        # Incremental logic: Only build if .md is newer than .html or .html is missing
         if not os.path.exists(html_filepath):
             needs_update = True
         elif os.path.getmtime(md_filepath) > os.path.getmtime(html_filepath):

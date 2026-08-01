@@ -43,17 +43,23 @@ def build_index():
             if tags:
                 tag_html = f"<span>{tags[0]}</span>"
 
-        # Check for a cover image
+        # Check for a cover image and strip any accidental quotes
         image_match = re.search(r'^image:\s*(.+)$', frontmatter, re.MULTILINE)
-        image_filename = image_match.group(1).strip() if image_match else None
+        image_filename = image_match.group(1).strip(' "\'') if image_match else ""
 
-        # 4. Generate the HTML for this specific card
-        if image_filename:
+        # 4. STRICT FILE CHECK: Verify the image actually exists on the hard drive
+        image_exists = False
+        if image_filename and image_filename.lower() not in ["", "none", "null"]:
+            image_path = os.path.join(folder_path, image_filename)
+            if os.path.exists(image_path):
+                image_exists = True
+
+        # Generate the HTML for this specific card
+        if image_exists:
             # Render an Image Card
-            image_path = f"pages/{folder_name}/{image_filename}"
             card_html = f"""
             <div class="aspect-square p-2">
-                <a href="pages/{folder_name}/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
+                <a href="{folder_path}/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
                     <img src="{image_path}" alt="{title}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="relative flex h-full flex-col justify-between p-6 z-10">
@@ -61,23 +67,23 @@ def build_index():
                             {tag_html}
                         </div>
                         <div>
-                            <h3 class="font-serif-custom text-3xl font-light text-white">{title}</h3>
+                            <h3 class="text-3xl font-light text-white">{title}</h3>
                             <p class="mt-2 text-sm text-white/80 line-clamp-2">{description}</p>
                         </div>
                     </div>
                 </a>
             </div>"""
         else:
-            # Render a Standard Text Card
+            # Render a Standard Text Card (Blank White)
             card_html = f"""
             <div class="aspect-square p-2">
-                <a href="pages/{folder_name}/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-neutral-50 transition-colors hover:bg-neutral-100 border border-transparent hover:border-neutral-200">
+                <a href="{folder_path}/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-white transition-colors hover:bg-neutral-50 border border-neutral-200">
                     <div class="flex h-full flex-col justify-between p-6">
                         <div class="flex items-center justify-between text-sm tracking-tight text-neutral-400">
                             {tag_html}
                         </div>
                         <div>
-                            <h3 class="font-serif-custom text-3xl font-light text-neutral-900">{title}</h3>
+                            <h3 class="text-3xl font-light text-neutral-900">{title}</h3>
                             <p class="mt-2 text-sm text-neutral-500 line-clamp-3">{description}</p>
                         </div>
                     </div>
@@ -115,31 +121,25 @@ def build_index():
                 <a class="rounded py-1 px-3 text-sm tracking-tight text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors" href="/garden">Garden</a>
             </div>
             <div class="hidden md:flex gap-4">
-                <a href="https://github.com/" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors underline decoration-wavy underline-offset-4">GitHub</a>
-                <a href="#" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors underline decoration-wavy underline-offset-4">Resume</a>
+                <a href="https://github.com/" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">GitHub</a>
+                <a href="#" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">Resume</a>
             </div>
         </nav>
 
-        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            
-            <!-- Hero / Intro Section -->
-            <div class="row-span-2 sm:col-span-2 lg:aspect-square p-2">
-                <div class="h-full w-full p-6 sm:p-8 rounded-xl bg-neutral-50">
-                    <h1 class="font-serif-custom text-3xl font-light leading-snug text-neutral-500 sm:text-4xl lg:text-5xl">
-                        Hey there, I’m <span class="text-neutral-900 font-medium">Liam</span> 👋 <br><br>
-                        Welcome to my digital garden 🌱. <br><br>
-                        I'm a robotics engineer currently building at <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">EraDrive</a>. <br><br>
-                        In my free time, I enjoy dialing in my <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">espresso</a> setup, shooting <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">B&W film</a>, and spending time <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">outdoors</a> surfing and skiing.
-                    </h1>
-                </div>
-            </div>
+        <!-- Hero / Intro Section (Simplified) -->
+        <section class="min-h-[80vh] flex flex-col justify-center py-12 px-2">
+            <h1 class="text-4xl font-light leading-snug text-neutral-500 md:text-5xl lg:text-6xl lg:leading-tight">
+                Hello, I'm <span class="text-neutral-900 font-medium">Liam</span>.<br><br>
+                Welcome to my digital garden.
+            </h1>
+        </section>
 
-            <!-- Dynamically Populated Cards -->
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {all_cards_html}
-
         </div>
 
-        <footer class="mt-24 mb-12 flex justify-center">
+        <footer class="mt-32 mb-12 flex justify-center">
             <span class="text-sm tracking-tight text-neutral-400">Tended by Liam Campbell</span>
         </footer>
 

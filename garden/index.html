@@ -20,46 +20,54 @@
                 <a class="rounded py-1 px-3 text-sm tracking-tight text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors" href="/garden">Garden</a>
             </div>
             <div class="hidden md:flex gap-4">
-                <a href="https://github.com/" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors underline decoration-wavy underline-offset-4">GitHub</a>
-                <a href="#" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors underline decoration-wavy underline-offset-4">Resume</a>
+                <a href="https://github.com/" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">GitHub</a>
+                <a href="#" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">Resume</a>
             </div>
         </nav>
 
-        <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            
-            <!-- Hero / Intro Section -->
-            <div class="row-span-2 sm:col-span-2 lg:aspect-square p-2">
-                <div class="h-full w-full p-6 sm:p-8 rounded-xl bg-neutral-50">
-                    <h1 class="font-serif-custom text-3xl font-light leading-snug text-neutral-500 sm:text-4xl lg:text-5xl">
-                        Hey there, I’m <span class="text-neutral-900 font-medium">Liam</span> 👋 <br><br>
-                        Welcome to my digital garden 🌱. <br><br>
-                        I'm a robotics engineer currently building at <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">EraDrive</a>. <br><br>
-                        In my free time, I enjoy dialing in my <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">espresso</a> setup, shooting <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">B&W film</a>, and spending time <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">outdoors</a> surfing and skiing.
-                    </h1>
-                </div>
-            </div>
+        <!-- Hero / Intro Section (Simplified) -->
+        <section class="min-h-[80vh] flex flex-col justify-center py-12 px-2">
+            <h1 class="text-4xl font-light leading-snug text-neutral-500 md:text-5xl lg:text-6xl lg:leading-tight">
+                Hello, I'm <span class="text-neutral-900 font-medium">Liam</span>.<br><br>
+                Welcome to my digital garden.
+            </h1>
+        </section>
 
-            <!-- Dynamically Populated Cards -->
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             
             <div class="aspect-square p-2">
-                <a href="pages/theseed/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
-                    <img src="pages/theseed/nh.jpg" alt="The Seed" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                <a href="pages/institution/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-white transition-colors hover:bg-neutral-50 border border-neutral-200">
+                    <div class="flex h-full flex-col justify-between p-6">
+                        <div class="flex items-center justify-between text-sm tracking-tight text-neutral-400">
+                            <span>Field Notes</span>
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-light text-neutral-900">Institutions</h3>
+                            <p class="mt-2 text-sm text-neutral-500 line-clamp-3">A new format for highlighting local businesses I love.</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="aspect-square p-2">
+                <a href="pages/the-seed/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
+                    <img src="pages/the-seed/nh.jpg" alt="The Seed" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <div class="relative flex h-full flex-col justify-between p-6 z-10">
                         <div class="flex items-center justify-between text-sm tracking-tight text-white/90">
                             <span>Field Notes</span>
                         </div>
                         <div>
-                            <h3 class="font-serif-custom text-3xl font-light text-white">The Seed</h3>
+                            <h3 class="text-3xl font-light text-white">The Seed</h3>
                             <p class="mt-2 text-sm text-white/80 line-clamp-2">The first page.</p>
                         </div>
                     </div>
                 </a>
             </div>
-
         </div>
 
-        <footer class="mt-24 mb-12 flex justify-center">
+        <footer class="mt-32 mb-12 flex justify-center">
             <span class="text-sm tracking-tight text-neutral-400">Tended by Liam Campbell</span>
         </footer>
 
