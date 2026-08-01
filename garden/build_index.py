@@ -14,39 +14,62 @@ def build_index():
     # 1. Loop through all page folders in the /pages/ directory
     for folder_name in os.listdir(pages_dir):
         folder_path = os.path.join(pages_dir, folder_name)
-        txt_filepath = os.path.join(folder_path, 'content.txt')
+        md_filepath = os.path.join(folder_path, 'content.md')
         
-        # Skip if it's not a folder or doesn't have a content.txt
-        if not os.path.isdir(folder_path) or not os.path.exists(txt_filepath):
+        # Skip if it's not a folder or doesn't have a content.md
+        if not os.path.isdir(folder_path) or not os.path.exists(md_filepath):
             continue
 
-        with open(txt_filepath, 'r', encoding='utf-8') as f:
+        with open(md_filepath, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        # 2. Extract Metadata Block
-        meta_match = re.search(r'/\*(.*?)\*/', content, re.DOTALL)
+        # 2. Extract YAML Frontmatter
+        meta_match = re.search(r'^---\n(.*?)\n---', content, re.DOTALL)
         if not meta_match:
             continue
-        meta_block = meta_match.group(1)
+        frontmatter = meta_match.group(1)
 
-        # 3. Extract Specific Fields
-        title_match = re.search(r'title:\s*([^\n]*)', meta_block)
-        title = title_match.group(1).strip() if title_match and title_match.group(1).strip() else "Untitled Page"
+        # 3. Extract Specific Fields from YAML
+        title_match = re.search(r'^title:\s*(.+)$', frontmatter, re.MULTILINE)
+        title = title_match.group(1).strip() if title_match else "Untitled Page"
 
-        desc_match = re.search(r'description:\s*([^\n]*)', meta_block)
-        description = desc_match.group(1).strip() if desc_match and desc_match.group(1).strip() else ""
+        desc_match = re.search(r'^description:\s*(.+)$', frontmatter, re.MULTILINE)
+        description = desc_match.group(1).strip() if desc_match else ""
 
-        tags_match = re.search(r'tags:\s*\{(.*?)\}', meta_block, re.DOTALL)
+        tags_match = re.search(r'^tags:\s*(.+)$', frontmatter, re.MULTILINE)
         tag_html = ""
         if tags_match:
-            # Extract tags, ignoring empty lines
-            tags = [t.strip() for t in tags_match.group(1).split('\n') if t.strip()]
+            tags = [t.strip() for t in tags_match.group(1).split(',') if t.strip()]
             if tags:
-                # Use the first tag for the card label
                 tag_html = f"<span>{tags[0]}</span>"
 
+        # Check for a cover image
+        image_match = re.search(r'^image:\s*(.+)$', frontmatter, re.MULTILINE)
+        image_filename = image_match.group(1).strip() if image_match else None
+
         # 4. Generate the HTML for this specific card
-        card_html = f"""
+        if image_filename:
+            # Render an Image Card
+            image_path = f"pages/{folder_name}/{image_filename}"
+            card_html = f"""
+            <div class="aspect-square p-2">
+                <a href="pages/{folder_name}/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
+                    <img src="{image_path}" alt="{title}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="relative flex h-full flex-col justify-between p-6 z-10">
+                        <div class="flex items-center justify-between text-sm tracking-tight text-white/90">
+                            {tag_html}
+                        </div>
+                        <div>
+                            <h3 class="font-serif-custom text-3xl font-light text-white">{title}</h3>
+                            <p class="mt-2 text-sm text-white/80 line-clamp-2">{description}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>"""
+        else:
+            # Render a Standard Text Card
+            card_html = f"""
             <div class="aspect-square p-2">
                 <a href="pages/{folder_name}/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-neutral-50 transition-colors hover:bg-neutral-100 border border-transparent hover:border-neutral-200">
                     <div class="flex h-full flex-col justify-between p-6">
@@ -60,10 +83,10 @@ def build_index():
                     </div>
                 </a>
             </div>"""
+            
         generated_cards.append(card_html)
 
-    # 5. Algorithmically select/randomize the output
-    # This randomizes the layout every time you run the build script
+    # 5. Algorithmically randomize the output
     random.shuffle(generated_cards)
     
     # Combine all cards into one string
@@ -76,7 +99,10 @@ def build_index():
     <meta charset="utf-8"/>
     <title>Liam's Garden</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23ef4444'/></svg>">
+    
+    <!-- Animated Red Circle Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23ef4444'><animate attributeName='fill' values='%23ef4444;%233b82f6;%2310b981;%23ef4444' dur='6s' repeatCount='indefinite'/></circle></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -89,8 +115,8 @@ def build_index():
                 <a class="rounded py-1 px-3 text-sm tracking-tight text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors" href="/garden">Garden</a>
             </div>
             <div class="hidden md:flex gap-4">
-                <a href="https://github.com/" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">GitHub</a>
-                <a href="#" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">Resume</a>
+                <a href="https://github.com/" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors underline decoration-wavy underline-offset-4">GitHub</a>
+                <a href="#" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors underline decoration-wavy underline-offset-4">Resume</a>
             </div>
         </nav>
 
@@ -102,8 +128,8 @@ def build_index():
                     <h1 class="font-serif-custom text-3xl font-light leading-snug text-neutral-500 sm:text-4xl lg:text-5xl">
                         Hey there, I’m <span class="text-neutral-900 font-medium">Liam</span> 👋 <br><br>
                         Welcome to my digital garden 🌱. <br><br>
-                        I'm a robotics engineer currently building at <a href="#" class="text-red-500 hover:text-red-600 transition-colors">EraDrive</a>. <br><br>
-                        In my free time, I enjoy dialing in my <a href="#" class="text-red-500 hover:text-red-600 transition-colors">espresso</a> setup, shooting <a href="#" class="text-red-500 hover:text-red-600 transition-colors">B&W film</a>, and spending time <a href="#" class="text-red-500 hover:text-red-600 transition-colors">outdoors</a> surfing and skiing.
+                        I'm a robotics engineer currently building at <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">EraDrive</a>. <br><br>
+                        In my free time, I enjoy dialing in my <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">espresso</a> setup, shooting <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">B&W film</a>, and spending time <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">outdoors</a> surfing and skiing.
                     </h1>
                 </div>
             </div>
@@ -121,7 +147,6 @@ def build_index():
 </body>
 </html>"""
 
-    # Save the updated index.html in the root of the garden folder
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
 

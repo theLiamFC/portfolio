@@ -4,7 +4,10 @@
     <meta charset="utf-8"/>
     <title>Liam's Garden</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23ef4444'/></svg>">
+    
+    <!-- Animated Red Circle Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23ef4444'><animate attributeName='fill' values='%23ef4444;%233b82f6;%2310b981;%23ef4444' dur='6s' repeatCount='indefinite'/></circle></svg>">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -17,8 +20,8 @@
                 <a class="rounded py-1 px-3 text-sm tracking-tight text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors" href="/garden">Garden</a>
             </div>
             <div class="hidden md:flex gap-4">
-                <a href="https://github.com/" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">GitHub</a>
-                <a href="#" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors">Resume</a>
+                <a href="https://github.com/" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors underline decoration-wavy underline-offset-4">GitHub</a>
+                <a href="#" class="text-sm tracking-tight text-neutral-400 hover:text-neutral-900 transition-colors underline decoration-wavy underline-offset-4">Resume</a>
             </div>
         </nav>
 
@@ -30,8 +33,8 @@
                     <h1 class="font-serif-custom text-3xl font-light leading-snug text-neutral-500 sm:text-4xl lg:text-5xl">
                         Hey there, I’m <span class="text-neutral-900 font-medium">Liam</span> 👋 <br><br>
                         Welcome to my digital garden 🌱. <br><br>
-                        I'm a robotics engineer currently building at <a href="#" class="text-red-500 hover:text-red-600 transition-colors">EraDrive</a>. <br><br>
-                        In my free time, I enjoy dialing in my <a href="#" class="text-red-500 hover:text-red-600 transition-colors">espresso</a> setup, shooting <a href="#" class="text-red-500 hover:text-red-600 transition-colors">B&W film</a>, and spending time <a href="#" class="text-red-500 hover:text-red-600 transition-colors">outdoors</a> surfing and skiing.
+                        I'm a robotics engineer currently building at <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">EraDrive</a>. <br><br>
+                        In my free time, I enjoy dialing in my <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">espresso</a> setup, shooting <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">B&W film</a>, and spending time <a href="#" class="text-red-500 hover:text-red-600 transition-colors underline decoration-wavy underline-offset-4">outdoors</a> surfing and skiing.
                     </h1>
                 </div>
             </div>
@@ -39,14 +42,16 @@
             <!-- Dynamically Populated Cards -->
             
             <div class="aspect-square p-2">
-                <a href="pages/theseed/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-neutral-50 transition-colors hover:bg-neutral-100 border border-transparent hover:border-neutral-200">
-                    <div class="flex h-full flex-col justify-between p-6">
-                        <div class="flex items-center justify-between text-sm tracking-tight text-neutral-400">
+                <a href="pages/theseed/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
+                    <img src="pages/theseed/nh.jpg" alt="The Seed" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <div class="relative flex h-full flex-col justify-between p-6 z-10">
+                        <div class="flex items-center justify-between text-sm tracking-tight text-white/90">
                             <span>Field Notes</span>
                         </div>
                         <div>
-                            <h3 class="font-serif-custom text-3xl font-light text-neutral-900">The Seed</h3>
-                            <p class="mt-2 text-sm text-neutral-500 line-clamp-3">The first page in my digital garden.</p>
+                            <h3 class="font-serif-custom text-3xl font-light text-white">The Seed</h3>
+                            <p class="mt-2 text-sm text-white/80 line-clamp-2">The first page.</p>
                         </div>
                     </div>
                 </a>
