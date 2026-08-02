@@ -7,49 +7,25 @@ if [ -z "$1" ]; then
   exit 1
 fi
 
-FOLDER="pages/$1"
-FILE="$FOLDER/content.md"
 TODAY=$(date +'%Y-%m-%d')
-
-# Read the second argument as the type, default to 'blog' if missing
 TYPE=${2:-blog}
 
+# NEW: The folder path now nests inside the TYPE category
+FOLDER="pages/${TYPE}/$1"
+FILE="$FOLDER/content.md"
+TEMPLATE="templates/${TYPE}.md"
+
+# Check if the requested template actually exists
+if [ ! -f "$TEMPLATE" ]; then
+  echo "❌ Error: Template file '$TEMPLATE' does not exist."
+  echo "Please create it or specify a valid type."
+  exit 1
+fi
+
+# Creates the category folder and the page folder simultaneously
 mkdir -p "$FOLDER"
 
-# Generate different markdown templates based on the type
-if [ "$TYPE" = "institution" ]; then
-cat <<EOF > "$FILE"
----
-title: 
-description: 
-created: $TODAY
-tags: 
-image: 
-type: institution
-location: 
-rating: 
----
-
-## The Vibe
-
-
-## What to Order
-
-
-EOF
-else
-cat <<EOF > "$FILE"
----
-title: 
-description: 
-created: $TODAY
-tags: 
-image: 
-type: blog
----
-
-Write your new thoughts here...
-EOF
-fi
+# Copy the template and swap the {{TODAY}} placeholder with the actual date
+sed "s/{{TODAY}}/$TODAY/g" "$TEMPLATE" > "$FILE"
 
 echo "🌱 Successfully planted a new $TYPE page at: $FILE"

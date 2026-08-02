@@ -4,10 +4,7 @@
     <meta charset="utf-8"/>
     <title>Liam's Garden</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    
-    <!-- Animated Red Circle Favicon -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23ef4444'><animate attributeName='fill' values='%23ef4444;%233b82f6;%2310b981;%23ef4444' dur='6s' repeatCount='indefinite'/></circle></svg>">
-    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23ef4444'><animate attributeName='fill' values='%23ef4444;%233b82f6;%2310b981;%23ef4444' dur='15s' repeatCount='indefinite'/></circle></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -25,7 +22,6 @@
             </div>
         </nav>
 
-        <!-- Hero / Intro Section (Simplified) -->
         <section class="min-h-[80vh] flex flex-col justify-center py-12 px-2">
             <h1 class="text-4xl font-light leading-snug text-neutral-500 md:text-5xl lg:text-6xl lg:leading-tight">
                 Hello, I'm <span class="text-neutral-900 font-medium">Liam</span>.<br><br>
@@ -33,38 +29,45 @@
             </h1>
         </section>
 
-        <!-- Gallery Grid -->
         <div class="grid grid-cols-1 gap-4 sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             
-            <div class="aspect-square p-2">
-                <a href="pages/institution/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-white transition-colors hover:bg-neutral-50 border border-neutral-200">
-                    <div class="flex h-full flex-col justify-between p-6">
-                        <div class="flex items-center justify-between text-sm tracking-tight text-neutral-400">
-                            <span>Field Notes</span>
+                <div class="aspect-square p-2">
+                    <a href="pages/blogs/the-seed/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
+                        <img src="pages/blogs/the-seed/brayhead.jpeg" alt="The Seed" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                        <div class="relative flex h-full flex-col justify-between p-6 z-10">
+                            <div class="flex items-center justify-between text-sm tracking-tight text-white/90">
+                                <span>Field Notes</span>
+                            </div>
+                            <div>
+                                <h3 class="text-3xl font-light text-white drop-shadow-md">The Seed</h3>
+                                <p class="mt-2 text-sm text-white/90 line-clamp-2 drop-shadow-md">The first page in my digital garden.</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-3xl font-light text-neutral-900">Institutions</h3>
-                            <p class="mt-2 text-sm text-neutral-500 line-clamp-3">A new format for highlighting local businesses I love.</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
 
-            <div class="aspect-square p-2">
-                <a href="pages/the-seed/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
-                    <img src="pages/the-seed/nh.jpg" alt="The Seed" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                    <div class="relative flex h-full flex-col justify-between p-6 z-10">
-                        <div class="flex items-center justify-between text-sm tracking-tight text-white/90">
-                            <span>Field Notes</span>
+                <div class="aspect-square p-2">
+                    <a href="pages/photos/arastradero/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
+                        <img src="pages/photos/arastradero/arastradero.jpg" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    </a>
+                </div>
+
+                <div class="aspect-square p-2">
+                    <a href="pages/books/incorruptible/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
+                        <img src="pages/books/incorruptible/image.png" alt="Incorruptible" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                        <div class="relative flex h-full flex-col justify-between p-6 z-10">
+                            <div class="flex items-center justify-between text-sm tracking-tight text-white/90">
+                                <span>image: image.png</span>
+                            </div>
+                            <div>
+                                <h3 class="text-3xl font-light text-white drop-shadow-md">Incorruptible</h3>
+                                <p class="mt-2 text-sm text-white/90 line-clamp-2 drop-shadow-md">created: 2026-08-01</p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 class="text-3xl font-light text-white">The Seed</h3>
-                            <p class="mt-2 text-sm text-white/80 line-clamp-2">The first page.</p>
-                        </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
         </div>
 
         <footer class="mt-32 mb-12 flex justify-center">

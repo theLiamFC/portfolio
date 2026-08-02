@@ -12,8 +12,7 @@ A custom, lightweight Static Site Generator (SSG) built with Python and Shell sc
     │   ├── /the-seed           # Each page gets its own folder
     │   │   ├── content.md      # The raw markdown file
     │   │   ├── index.html      # The generated HTML (do not edit manually)
-    │   │   └── cover.jpg       # Optional local images
-    │   └── /best-coffee
+    │   └── └── cover.jpg       # Optional local images
     │
     ├── build_index.py          # Generates the homepage grid
     ├── garden_parser.py        # Converts .md files to .html
