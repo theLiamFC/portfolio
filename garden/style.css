@@ -2,3 +2,58 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Tile sizing for garden index grid */
+.tile-grid {
+    align-items: start;
+    display: grid;
+    gap: 0.6rem;
+}
+
+/* Ensure grid items respect their assigned area and include padding in sizing */
+.tile-grid > * {
+    box-sizing: border-box;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Tile aspect ratios (apply on all sizes) */
+.tile-small { aspect-ratio: 1 / 1; }
+.tile-square { aspect-ratio: 1 / 1; }
+.tile-portrait { aspect-ratio: 2 / 3; }
+.tile-landscape { aspect-ratio: 3 / 2; }
+.tile-panorama { aspect-ratio: 3 / 1; }
+
+/* Responsive column spans tuned to the container breakpoints used in the HTML grid */
+/* Mobile: no spans (each item stacks) */
+@media (min-width: 640px) { /* sm: 2 columns */
+    .tile-small { grid-column: span 1; }
+    .tile-square { grid-column: span 2; }
+    .tile-landscape { grid-column: span 2; }
+    .tile-panorama { grid-column: span 2; }
+}
+
+@media (min-width: 1024px) { /* lg: 6 columns */
+    .tile-small { grid-column: span 1; }
+    .tile-square { grid-column: span 2; }
+    .tile-portrait { grid-column: span 2; }
+    .tile-landscape { grid-column: span 3; }
+    .tile-panorama { grid-column: span 6; }
+}
+
+@media (min-width: 1280px) { /* xl: 6 columns */
+    .tile-small { grid-column: span 1; }
+    .tile-square { grid-column: span 2; }
+    .tile-portrait { grid-column: span 2; }
+    .tile-landscape { grid-column: span 3; }
+    .tile-panorama { grid-column: span 6; }
+}
+
+.tile-grid .tile-small a,
+.tile-grid .tile-square a,
+.tile-grid .tile-portrait a,
+.tile-grid .tile-landscape a,
+.tile-grid .tile-panorama a {
+    display: block;
+    height: 100%;
+}

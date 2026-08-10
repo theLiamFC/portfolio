@@ -12,14 +12,14 @@ def build_index():
     generated_cards = []
 
     # NEW: Loop through Category folders first
-    for category_name in os.listdir(pages_dir):
+    for category_name in sorted(os.listdir(pages_dir)):
         category_path = os.path.join(pages_dir, category_name)
         
         if not os.path.isdir(category_path):
             continue
 
         # Loop through Page folders inside the Category
-        for folder_name in os.listdir(category_path):
+        for folder_name in sorted(os.listdir(category_path)):
             folder_path = os.path.join(category_path, folder_name)
             md_filepath = os.path.join(folder_path, 'content.md')
             
@@ -40,12 +40,19 @@ def build_index():
             desc_match = re.search(r'^description:\s*(.+)$', frontmatter, re.MULTILINE)
             description = desc_match.group(1).strip() if desc_match else ""
 
-            tags_match = re.search(r'^tags:\s*(.+)$', frontmatter, re.MULTILINE)
+            # Match tags even if the value is empty; avoid accidentally capturing the next frontmatter key
+            tags_match = re.search(r'^tags:\s*(.*)$', frontmatter, re.MULTILINE)
             tag_html = ""
-            if tags_match:
-                tags = [t.strip() for t in tags_match.group(1).split(',') if t.strip()]
+            if tags_match is not None:
+                tags_raw = tags_match.group(1).strip()
+                tags = [t.strip() for t in tags_raw.split(',') if t.strip()] if tags_raw else []
                 if tags:
-                    tag_html = f"<span>{tags[0]}</span>"
+                    first_tag = tags[0]
+                    # sanitize: ignore values that look like frontmatter keys or filenames
+                    if first_tag.endswith(':') or re.search(r'\.(jpg|jpeg|png|gif|svg)$', first_tag, re.IGNORECASE) or ':' in first_tag:
+                        tag_html = ""
+                    else:
+                        tag_html = f"<span>{first_tag}</span>"
 
             type_match = re.search(r'^type:\s*(.+)$', frontmatter, re.MULTILINE)
             page_type = type_match.group(1).strip() if type_match else "blog"
@@ -59,49 +66,69 @@ def build_index():
                 if os.path.exists(image_path):
                     image_exists = True
 
-            if page_type == "photo" and image_exists:
-                card_html = f"""
-                <div class="aspect-square p-2">
-                    <a href="{folder_path}/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
-                        <img src="{image_path}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
-                    </a>
-                </div>"""
-            elif image_exists:
-                card_html = f"""
-                <div class="aspect-square p-2">
-                    <a href="{folder_path}/index.html" class="group relative block h-full w-full overflow-hidden rounded-xl bg-neutral-100">
-                        <img src="{image_path}" alt="{title}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                        <div class="relative flex h-full flex-col justify-between p-6 z-10">
-                            <div class="flex items-center justify-between text-sm tracking-tight text-white/90">
-                                {tag_html}
+            # parse display_size and map to tile CSS class
+            display_match = re.search(r'^display_size:\s*(.+)$', frontmatter, re.MULTILINE)
+            display_value = display_match.group(1).strip().lower() if display_match else "square"
+            tile_map = {
+                'small-square': 'tile-small',
+                'square': 'tile-square',
+                'portrait': 'tile-portrait',
+                'landscape': 'tile-landscape',
+                'panorama': 'tile-panorama'
+            }
+            tile_class = tile_map.get(display_value, 'tile-square')
+
+            hide_text = page_type == 'photo' or display_value == 'small-square'
+
+            if image_exists:
+                if hide_text:
+                    card_html = f"""
+                    <div class="{tile_class} p-2">
+                        <a href="{folder_path}/index.html" class="group relative block h-full w-full overflow-hidden rounded-lg bg-neutral-100">
+                            <img src="{image_path}" alt="{title}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        </a>
+                    </div>"""
+                else:
+                    card_html = f"""
+                    <div class="{tile_class} p-2">
+                        <a href="{folder_path}/index.html" class="group relative block h-full w-full overflow-hidden rounded-lg bg-neutral-100">
+                            <img src="{image_path}" alt="{title}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                            <div class="relative flex h-full flex-col justify-between p-6 z-10">
+                                <div class="flex items-center justify-between text-sm tracking-tight text-white/90">
+                                    {tag_html}
+                                </div>
+                                <div>
+                                    <h3 class="text-3xl font-light text-white drop-shadow-md">{title}</h3>
+                                    <p class="mt-2 text-sm text-white/90 line-clamp-2 drop-shadow-md">{description}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="text-3xl font-light text-white drop-shadow-md">{title}</h3>
-                                <p class="mt-2 text-sm text-white/90 line-clamp-2 drop-shadow-md">{description}</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>"""
+                        </a>
+                    </div>"""
             else:
-                card_html = f"""
-                <div class="aspect-square p-2">
-                    <a href="{folder_path}/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-white transition-colors hover:bg-neutral-50 border border-neutral-200">
-                        <div class="flex h-full flex-col justify-between p-6">
-                            <div class="flex items-center justify-between text-sm tracking-tight text-neutral-400">
-                                {tag_html}
+                if hide_text:
+                    card_html = f"""
+                    <div class="{tile_class} p-2">
+                        <a href="{folder_path}/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-white border border-neutral-200"></a>
+                    </div>"""
+                else:
+                    card_html = f"""
+                    <div class="{tile_class} p-2">
+                        <a href="{folder_path}/index.html" class="group block h-full w-full overflow-hidden rounded-lg bg-white transition-colors hover:bg-neutral-50 border border-neutral-200">
+                            <div class="flex h-full flex-col justify-between p-6">
+                                <div class="flex items-center justify-between text-sm tracking-tight text-neutral-400">
+                                    {tag_html}
+                                </div>
+                                <div>
+                                    <h3 class="text-3xl font-light text-neutral-900">{title}</h3>
+                                    <p class="mt-2 text-sm text-neutral-500 line-clamp-3">{description}</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 class="text-3xl font-light text-neutral-900">{title}</h3>
-                                <p class="mt-2 text-sm text-neutral-500 line-clamp-3">{description}</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>"""
-                
+                        </a>
+                    </div>"""
+            
             generated_cards.append(card_html)
 
-    random.shuffle(generated_cards)
     all_cards_html = "\n".join(generated_cards)
 
     html_content = f"""<!DOCTYPE html>
@@ -135,7 +162,7 @@ def build_index():
             </h1>
         </section>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-flow-row-dense sm:grid-cols-2 lg:grid-cols-6 xl:grid-cols-6">
             {all_cards_html}
         </div>
 

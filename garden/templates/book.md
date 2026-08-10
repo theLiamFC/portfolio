@@ -11,12 +11,12 @@ description:
 created: {{TODAY}}
 tags: 
 image: 
+display_size: small-square
 
 # Unique Info
 author: 
 status: 
 format:
----
 
 ## Quick Summary
 

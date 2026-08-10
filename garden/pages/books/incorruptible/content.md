@@ -13,6 +13,9 @@ image: image.png
 author: Eric Ries
 status: Completed
 format: Hardback
+display_size: small-square
+
+revised: 2026-08-09
 ---
 
 ## Quick Summary

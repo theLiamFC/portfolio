@@ -3,7 +3,7 @@
 # Hikes, bikes, runs, surfs, roadtrips, etc.
 
 # Key Info
-title: 
+title:
 type: adventure
 
 # Describing Info
@@ -11,11 +11,12 @@ description:
 created: {{TODAY}}
 tags: 
 image: 
+display_size: 
 
 # Unique Info
-location:
+location: 
 variety:
 duration:
+gpx:
 ---
 
-Describe the adventure here...

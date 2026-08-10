@@ -9,6 +9,7 @@ type: photo
 created: {{TODAY}}
 tags: 
 image: 
+display_size: portrait
 
 # Unique Info
 location: 

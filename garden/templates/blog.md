@@ -11,6 +11,7 @@ description:
 created: {{TODAY}}
 tags: 
 image: 
+display_size: square
 ---
 
 Write your new thoughts here...

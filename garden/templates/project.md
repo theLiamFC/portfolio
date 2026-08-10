@@ -11,12 +11,12 @@ description:
 created: {{TODAY}}
 tags: 
 image: 
+display_size: square
 
 # Unique Info
 status: 
 inspiration:
 duration:
----
 
 ## The Goal
 

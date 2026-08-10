@@ -4,6 +4,9 @@ description: The first page in my digital garden.
 created: 2026-07-30
 tags: Field Notes
 image: brayhead.jpeg
+display_size: square
+
+revised: 2026-08-09
 ---
 
 This should be my first page in my digital garden if I get everything working. My goal is to remove the barrier to creating
