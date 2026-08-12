@@ -6,14 +6,14 @@
 type: photo
 
 # Describing Info
-created: {{TODAY}}
+created: 2026-08-10
 tags: 
-image: 
-display_size: portrait
+image: fam.JPG
+display_size: square
 
 # Unique Info
-location: 
-date:
+location: Stanford, CA
+date: 2026-96-22
 ---
 
-Write your caption here...
+Stanford grad weekend with the fam!

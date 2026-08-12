@@ -6,14 +6,14 @@
 type: photo
 
 # Describing Info
-created: {{TODAY}}
+created: 2026-08-10
 tags: 
-image: 
+image: cover.JPG
 display_size: portrait
 
 # Unique Info
-location: 
-date:
+location: Somerville, MA
+date: 2026-07-08
 ---
 
-Write your caption here...
+Ava and my dad enjoying the nice summer weather before dinner.
