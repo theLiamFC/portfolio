@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "liam-digital-garden"
+version = "0.1.0"
+description = "Command-line tools for Liam's Digital Garden"
+requires-python = ">=3.10"
+dependencies = ["Markdown>=3.5,<4"]
+
+[project.scripts]
+garden = "garden_cli:main"
+
+[tool.setuptools]
+py-modules = ["build_index", "garden_cli", "garden_core", "garden_parser"]

@@ -1,0 +1,2 @@
+[console_scripts]
+garden = garden_cli:main

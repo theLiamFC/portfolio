@@ -14,10 +14,13 @@ A custom, lightweight Static Site Generator (SSG) built with Python and Shell sc
     │   │   ├── index.html      # The generated HTML (do not edit manually)
     │   └── └── cover.jpg       # Optional local images
     │
+    ├── garden_cli.py           # Command-line entry point
+    ├── garden_core.py          # Reusable garden operations
     ├── build_index.py          # Generates the homepage grid
     ├── garden_parser.py        # Converts .md files to .html
-    ├── plant.sh                # Script to scaffold new pages
-    ├── publish.sh              # Script to build and deploy
+    ├── plant.sh                # Compatibility wrapper for `garden plant`
+    ├── publish.sh              # Compatibility wrapper for build/deploy
+    ├── pyproject.toml          # Python package and CLI metadata
     ├── style.css               # Global Tailwind/CSS overrides
     └── index.html              # The generated homepage (do not edit manually)
 
@@ -25,14 +28,19 @@ A custom, lightweight Static Site Generator (SSG) built with Python and Shell sc
 
 ## ✍️ Creating Content
 
-To create a new page, use the `plant.sh` script. This will automatically generate a new folder in `/pages/` and create a `content.md` file with the correct YAML frontmatter and today's date.
+Install the command from this directory with `python3 -m pip install -e .`. The install is editable so the command continues to use this Garden's templates and pages. Run `garden --help` (or `garden -help`) to see available commands.
+
+To create a new page, use `garden plant`. This creates a folder in `/pages/` and a `content.md` file from the selected template with today's date.
 
 **Basic Usage (Blog Post):**
-    ./plant.sh folder-name
+    garden plant folder-name
 
 **Using a Specific Template:**
-You can pass a second argument to generate a specific page layout. Currently supported types are `blog` (default) and `institution` (for cafe/restaurant reviews).
-    ./plant.sh best-coffee institution
+Pass `--type` to select any available template, such as `media`, `recipe`, or `adventure`.
+    garden plant best-coffee --type place
+
+Use `--force` only when you intend to replace an existing page's `content.md`.
+    garden plant folder-name --force
 
 ---
 
@@ -68,15 +76,32 @@ To link to other pages within your garden, use the custom double-parentheses syn
 
 ## 🚀 Building and Publishing
 
-When you are done writing or editing, use the `publish.sh` script to compile the Markdown into HTML and update the homepage grid.
+When you are done writing or editing, build the Garden to compile Markdown pages and update the homepage grid.
 
-**1. Test Locally (No Git Push)**
-To build the site and preview it on your local machine without committing changes to your repository:
-    ./publish.sh local
+**Build locally (no Git operations):**
+    garden build
 
-**2. Publish to the Web**
-To parse all files, build the index, stage the changes, generate a timestamped commit message, and push directly to GitHub:
-    ./publish.sh
+To rebuild one page and the homepage:
+    garden build --page media/open-task-light
+
+**Deploy**
+Deploy rebuilds, stages Garden changes, creates a dated commit, and pushes to the configured Git remote:
+    garden deploy
+
+The existing shell commands remain available as wrappers: `./plant.sh page-name media`, `./publish.sh local`, and `./publish.sh` (deploy).
+
+### Python API
+
+The operations are also importable from `garden_core`:
+
+```python
+from garden_core import build_site, plant_page
+
+page_path = plant_page("field-note", page_type="blog")
+result = build_site()
+```
+
+Pass `root_dir="/path/to/garden"` to operate on a different Garden project. `build_site` returns a result with the number of updated pages and the generated homepage path. Errors are raised as `GardenError` (or standard filesystem/value errors).
 
 ---
 

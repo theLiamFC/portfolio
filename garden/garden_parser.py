@@ -1,6 +1,7 @@
 import sys
 import os
 import re
+from pathlib import Path
 from datetime import datetime, timedelta
 import markdown
 
@@ -16,23 +17,41 @@ def find_page_path(target_folder_name, base_dir='pages'):
                     return f"../../{category}/{page}/index.html"
     return "#"
 
-def process_folder(folder_path):
-    if folder_path.startswith('/') or folder_path.startswith('\\'):
-        folder_path = '.' + folder_path
+def embed_youtube_urls(body):
+    youtube_url = re.compile(
+        r'(?m)^[ \t]*https?://(?:www\.)?(?:youtube\.com/watch\?v=|youtube\.com/shorts/|youtu\.be/)([A-Za-z0-9_-]{11})(?:[?&][^\s]*)?[ \t]*$'
+    )
+
+    def replace_video(match):
+        video_id = match.group(1)
+        return (
+            '<div style="aspect-ratio: 16 / 9; width: 100%; margin: 1.5rem 0;">'
+            f'<iframe src="https://www.youtube-nocookie.com/embed/{video_id}" '
+            'title="YouTube video" style="width: 100%; height: 100%; border: 0;" '
+            'allow="accelerometer; autoplay; clipboard-write; encrypted-media; '
+            'gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>'
+        )
+
+    return youtube_url.sub(replace_video, body)
+
+def process_folder(folder_path, root_dir=None):
+    root_dir = Path(root_dir or Path.cwd())
+    folder_path = Path(folder_path)
+    if not folder_path.is_absolute():
+        folder_path = root_dir / folder_path
 
     md_filepath = os.path.join(folder_path, 'content.md')
     html_filepath = os.path.join(folder_path, 'index.html')
 
     if not os.path.exists(md_filepath):
-        print(f"  -> Error: 'content.md' not found in directory '{folder_path}'.")
-        return False
+        raise FileNotFoundError(f"content.md not found in '{folder_path}'")
 
     with open(md_filepath, 'r', encoding='utf-8') as f:
         content = f.read()
 
     meta_match = re.search(r'^---\n(.*?)\n---', content, re.DOTALL)
     if not meta_match:
-        return False
+        raise ValueError(f"invalid frontmatter in '{md_filepath}' (expected --- delimiters)")
     
     frontmatter = meta_match.group(1)
     body = content[meta_match.end():].strip()
@@ -41,10 +60,11 @@ def process_folder(folder_path):
     def replace_link(match):
         display_text = match.group(1)
         target_folder = match.group(2)
-        resolved_path = find_page_path(target_folder)
+        resolved_path = find_page_path(target_folder, base_dir=root_dir / 'pages')
         return f"[{display_text}]({resolved_path})"
         
     body = re.sub(r'\[(.*?)\]\(\((.*?)\)\)', replace_link, body)
+    body = embed_youtube_urls(body)
     final_html_body = markdown.markdown(body)
 
     type_match = re.search(r'^type:\s*(.+)$', frontmatter, re.MULTILINE)
@@ -200,10 +220,11 @@ def process_folder(folder_path):
         
     return True
 
-def process_all_pages(base_dir='pages'):
-    if not os.path.exists(base_dir):
-        print(f"Error: Directory '{base_dir}' not found.")
-        return
+def process_all_pages(root_dir=None):
+    root_dir = Path(root_dir or Path.cwd())
+    base_dir = root_dir / 'pages'
+    if not base_dir.is_dir():
+        raise FileNotFoundError(f"pages directory not found in '{root_dir}'")
 
     updated_count = 0
     
@@ -232,14 +253,10 @@ def process_all_pages(base_dir='pages'):
                 needs_update = True
                 
             if needs_update:
-                print(f"Parsing updated page: {folder_name}...")
-                if process_folder(folder_path):
-                    updated_count += 1
-                
-    if updated_count == 0:
-        print("All pages are up to date! No changes made.")
-    else:
-        print(f"Finished! Successfully parsed {updated_count} page(s).")
+                process_folder(folder_path, root_dir=root_dir)
+                updated_count += 1
+
+    return updated_count
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -249,4 +266,8 @@ if __name__ == "__main__":
         print("Done!")
     else:
         print("Scanning garden for updates...")
-        process_all_pages()
+        updated_count = process_all_pages()
+        if updated_count == 0:
+            print("All pages are up to date! No changes made.")
+        else:
+            print(f"Finished! Successfully parsed {updated_count} page(s).")

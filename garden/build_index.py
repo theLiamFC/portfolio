@@ -1,13 +1,14 @@
 import os
 import re
 import random
+from pathlib import Path
 
-def build_index():
-    pages_dir = 'pages'
-    
-    if not os.path.exists(pages_dir):
-        print(f"Error: '{pages_dir}' directory not found.")
-        return
+def build_index(root_dir=None):
+    root_dir = Path(root_dir or Path.cwd())
+    pages_dir = root_dir / 'pages'
+
+    if not pages_dir.is_dir():
+        raise FileNotFoundError(f"pages directory not found in '{root_dir}'")
 
     generated_cards = []
 
@@ -174,8 +175,10 @@ def build_index():
 </body>
 </html>"""
 
-    with open('index.html', 'w', encoding='utf-8') as f:
+    with open(root_dir / 'index.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
+
+    return root_dir / 'index.html'
 
 if __name__ == "__main__":
     build_index()

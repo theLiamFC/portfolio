@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: liam-digital-garden
+Version: 0.1.0
+Summary: Command-line tools for Liam's Digital Garden
+Requires-Python: >=3.10
+Requires-Dist: Markdown<4,>=3.5

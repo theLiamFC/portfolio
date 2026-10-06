@@ -10,11 +10,12 @@ type: recipe
 description: Super easy classic.
 created: 2026-08-10
 tags: Baking
-image: 
+image: popover.jpeg
 display_size: square
 
 # Unique Info
 time: 40 minutes
+revised: 2026-08-21
 ---
 
 My mom used to make popovers and I feel like they were always kind of magical. It was super exciting to see how much they rose and puffed with steam, and there's nothing like a buttery hot popover straight out of the oven on a gloomy day. For a while, we turned to [Dutch Babies](../../recipe/dutch-baby/index.html) but recently I have been getting back into the popover.
