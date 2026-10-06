@@ -20,15 +20,15 @@ status: Watched
 
 ## Thoughts
 
-I have been watching Steven Bennett's videos for a while and just watched his concluding post on the project. Check it out here:
+I have been watching Steven Bennett's videos on the (open task light project)[https://opentasklight.com/] for a while and just watched his concluding post on the project. Check it out here:
 
-<div style="aspect-ratio: 16 / 9; width: 100%; margin: 1.5rem 0;"><iframe src="https://www.youtube-nocookie.com/embed/ipVFRH6TQfM" title="YouTube video" style="width: 100%; height: 100%; border: 0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+<div style="aspect-ratio: 16 / 9; width: 100%; margin: 1.5rem 0;"><iframe src="https://www.youtube-nocookie.com/embed/ipVFRH6TQfM" title="YouTube video" style="width: 100%; height: 100%; border: 0;" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
 
 What a crazy project! Six years engineering a desk lamp that Dyson actively sells.
 
 I think this is a great example though of what makes mechanical engineering and good design so interesting. On the surface this lamp is elegant and simple. You can twist the light, position it's height and cantilever offset, and of course change the brightness, 
 
-[task-light.jpg]
+![The Dyson Task light](task-light.jpg)
 
 But dive deeper, as Steven did, into the work that goes into making it this simple and you reveal layers upon layers of complex technical challenges that had to be solved to make the beautiful simplicity work.
 
@@ -44,5 +44,6 @@ A couple ideas I have right now:
 - Stenciled / painted posters instead of just on my laptop
 - Design / control of an autonomous vehicle
 - Finishing Ben and I's PCB drone (see I have execution problems)
+- Custom speakers??? [Inspired by Despacio](../../blog/despacio/index.html)
 
 As a side note, I am very much an appreciator of good lighting design and I was definitely watching Steven Bennett's videos when I decided to make my first lamp (link here). Hopefully there are more to come!

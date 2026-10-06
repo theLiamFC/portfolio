@@ -28,11 +28,29 @@ def embed_youtube_urls(body):
             '<div style="aspect-ratio: 16 / 9; width: 100%; margin: 1.5rem 0;">'
             f'<iframe src="https://www.youtube-nocookie.com/embed/{video_id}" '
             'title="YouTube video" style="width: 100%; height: 100%; border: 0;" '
+            'referrerpolicy="strict-origin-when-cross-origin" '
             'allow="accelerometer; autoplay; clipboard-write; encrypted-media; '
             'gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>'
         )
 
     return youtube_url.sub(replace_video, body)
+
+def embed_spotify_urls(body):
+    spotify_url = re.compile(
+        r'(?m)^[ \t]*https?://open\.spotify\.com/(?:intl-[A-Za-z-]+/)?(?:embed/)?track/([A-Za-z0-9]{22})(?:[?][^\s]*)?[ \t]*$'
+    )
+
+    def replace_track(match):
+        track_id = match.group(1)
+        return (
+            '<iframe src="https://open.spotify.com/embed/track/'
+            f'{track_id}?utm_source=generator" width="100%" height="152" '
+            'style="border-radius: 12px; border: 0;" '
+            'allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" '
+            'loading="lazy"></iframe>'
+        )
+
+    return spotify_url.sub(replace_track, body)
 
 def process_folder(folder_path, root_dir=None):
     root_dir = Path(root_dir or Path.cwd())
@@ -65,6 +83,7 @@ def process_folder(folder_path, root_dir=None):
         
     body = re.sub(r'\[(.*?)\]\(\((.*?)\)\)', replace_link, body)
     body = embed_youtube_urls(body)
+    body = embed_spotify_urls(body)
     final_html_body = markdown.markdown(body)
 
     type_match = re.search(r'^type:\s*(.+)$', frontmatter, re.MULTILINE)

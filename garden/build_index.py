@@ -27,6 +27,8 @@ def build_index(root_dir=None):
             if not os.path.isdir(folder_path) or not os.path.exists(md_filepath):
                 continue
 
+            relative_folder = Path(folder_path).relative_to(root_dir).as_posix()
+
             with open(md_filepath, 'r', encoding='utf-8') as f:
                 content = f.read()
 
@@ -66,6 +68,7 @@ def build_index(root_dir=None):
                 image_path = os.path.join(folder_path, image_filename)
                 if os.path.exists(image_path):
                     image_exists = True
+                    image_src = Path(image_path).relative_to(root_dir).as_posix()
 
             # parse display_size and map to tile CSS class
             display_match = re.search(r'^display_size:\s*(.+)$', frontmatter, re.MULTILINE)
@@ -85,15 +88,15 @@ def build_index(root_dir=None):
                 if hide_text:
                     card_html = f"""
                     <div class="{tile_class} p-2">
-                        <a href="{folder_path}/index.html" class="group relative block h-full w-full overflow-hidden rounded-lg bg-neutral-100">
-                            <img src="{image_path}" alt="{title}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <a href="{relative_folder}/index.html" class="group relative block h-full w-full overflow-hidden rounded-lg bg-neutral-100">
+                            <img src="{image_src}" alt="{title}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
                         </a>
                     </div>"""
                 else:
                     card_html = f"""
                     <div class="{tile_class} p-2">
-                        <a href="{folder_path}/index.html" class="group relative block h-full w-full overflow-hidden rounded-lg bg-neutral-100">
-                            <img src="{image_path}" alt="{title}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                        <a href="{relative_folder}/index.html" class="group relative block h-full w-full overflow-hidden rounded-lg bg-neutral-100">
+                            <img src="{image_src}" alt="{title}" class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                             <div class="relative flex h-full flex-col justify-between p-6 z-10">
                                 <div class="flex items-center justify-between text-sm tracking-tight text-white/90">
@@ -110,12 +113,14 @@ def build_index(root_dir=None):
                 if hide_text:
                     card_html = f"""
                     <div class="{tile_class} p-2">
-                        <a href="{folder_path}/index.html" class="group block h-full w-full overflow-hidden rounded-xl bg-white border border-neutral-200"></a>
+                        <a href="{relative_folder}/index.html" class="group flex h-full w-full items-end overflow-hidden rounded-xl bg-white border border-neutral-200 p-4 transition-colors hover:bg-neutral-50">
+                            <h3 class="text-sm font-medium text-neutral-900 line-clamp-3">{title}</h3>
+                        </a>
                     </div>"""
                 else:
                     card_html = f"""
                     <div class="{tile_class} p-2">
-                        <a href="{folder_path}/index.html" class="group block h-full w-full overflow-hidden rounded-lg bg-white transition-colors hover:bg-neutral-50 border border-neutral-200">
+                        <a href="{relative_folder}/index.html" class="group block h-full w-full overflow-hidden rounded-lg bg-white transition-colors hover:bg-neutral-50 border border-neutral-200">
                             <div class="flex h-full flex-col justify-between p-6">
                                 <div class="flex items-center justify-between text-sm tracking-tight text-neutral-400">
                                     {tag_html}

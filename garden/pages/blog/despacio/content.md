@@ -14,6 +14,8 @@ image: despacio.JPG
 display_size: square
 ---
 
+<iframe src="https://open.spotify.com/embed/track/5vdp5UmvTsnMEMESIF2Ym7?utm_source=generator" width="100%" height="152" style="border-radius: 12px; border: 0;" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
 Last Sunday I spontaneously went to San Francisco's Portola music festival with Vedant and Julia!
 
 I had zero expectations or artists that I felt like I needed to see since I didn't even buy the tickets which made the experience very chill. It was cool to see some top DJs playing music I had never heard of. We saw Ben UFO and he was mixing up some crazy sounds.

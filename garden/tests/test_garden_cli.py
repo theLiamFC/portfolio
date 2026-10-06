@@ -50,6 +50,42 @@ class GardenCoreTests(unittest.TestCase):
         self.assertTrue(result.index_path.is_file())
         generated_page = (page_dir / "index.html").read_text(encoding="utf-8")
         self.assertIn("youtube-nocookie.com/embed/ipVFRH6TQfM", generated_page)
+        self.assertIn('referrerpolicy="strict-origin-when-cross-origin"', generated_page)
+
+    def test_build_converts_standalone_spotify_track_url(self):
+        track_id = "4uLU6hMCjMI75M1A2tKUQC"
+        page_dir = self.root / "pages" / "blog" / "spotify-note"
+        page_dir.mkdir(parents=True)
+        (page_dir / "content.md").write_text(
+            "---\ntitle: Spotify Note\ntype: blog\ncreated: 2026-10-05\n---\n\n"
+            f"https://open.spotify.com/track/{track_id}?si=share-id\n",
+            encoding="utf-8",
+        )
+
+        build_site(root_dir=self.root)
+
+        generated_page = (page_dir / "index.html").read_text(encoding="utf-8")
+        self.assertIn(f"open.spotify.com/embed/track/{track_id}?utm_source=generator", generated_page)
+        self.assertIn('height="152"', generated_page)
+
+    def test_small_square_page_without_image_shows_title_only(self):
+        page_dir = self.root / "pages" / "media" / "open-task-light"
+        page_dir.mkdir(parents=True)
+        (page_dir / "content.md").write_text(
+            "---\ntitle: The Open Task Light\ntype: media\n"
+            "description: This description should not appear on the compact card.\n"
+            "created: 2026-10-05\nimage:\ndisplay_size: small-square\n---\n\nNotes.\n",
+            encoding="utf-8",
+        )
+
+        build_site(root_dir=self.root)
+
+        homepage = (self.root / "index.html").read_text(encoding="utf-8")
+        self.assertIn('class="tile-small p-2"', homepage)
+        self.assertIn(">The Open Task Light</h3>", homepage)
+        self.assertNotIn("This description should not appear", homepage)
+        self.assertIn('href="pages/media/open-task-light/index.html"', homepage)
+        self.assertNotIn(str(self.root), homepage)
 
 
 class GardenCliTests(unittest.TestCase):
